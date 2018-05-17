@@ -1,4 +1,3 @@
-
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "dci/version"
@@ -7,17 +6,17 @@ Gem::Specification.new do |spec|
   spec.name          = "ruby_dci"
   spec.version       = ::DCI::VERSION
   spec.authors       = ["Aleksandr Lossenko"]
-  spec.email         = ["aleksandr.lossenko@gmail.com"]
+  spec.email         = ["aleksandr@byteflip.de"]
 
-  spec.summary       = %q{DCI for ruby}
-  spec.description   = %q{DCI for ruby}
+  spec.summary       = %q{Opinionated DCI implementation for ruby.}
+  spec.description   = %q{Provides base modules for DCI contexts, roles and event processing that should happen outside of the context transaction.}
   spec.homepage      = "https://github.com/egze/ruby_dci"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
   if spec.respond_to?(:metadata)
-    spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
+    spec.metadata["allowed_push_host"] = "https://rubygems.org"
   else
     raise "RubyGems 2.0 or newer is required to protect against " \
       "public gem pushes."

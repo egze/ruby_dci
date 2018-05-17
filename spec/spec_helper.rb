@@ -1,5 +1,11 @@
 require "bundler/setup"
-require "ruby_dci"
+require "dci"
+
+require "examples/boy"
+require "examples/domain_events"
+require "examples/route_method_store"
+require "examples/student"
+require "examples/do_homework"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
@@ -10,5 +16,14 @@ RSpec.configure do |config|
 
   config.expect_with :rspec do |c|
     c.syntax = :expect
+  end
+
+  config.before(:all) do
+
+    DCI.configure do |config|
+      config.event_routes.store DomainEvents::HomeworkDone, [ :publish_money_transfered ]
+      config.route_methods = RouteMethodStore.new
+    end
+
   end
 end

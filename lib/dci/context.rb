@@ -2,12 +2,18 @@ module DCI
 
   module Context
 
+    include EventRouter
+    include Accessor
+
+    attr_accessor :events
+
     def self.included(base)
       base.send :include, InstanceMethods
       base.extend ClassMethods
     end
 
     module InstanceMethods
+
       def perform_in_transaction
         old_context = context
         @events = []
@@ -15,7 +21,7 @@ module DCI
 
         res = nil
 
-        ActiveRecord::Base.transaction do
+        DCI.configuration.transaction_class.transaction do
           res = call
         end
 
@@ -23,7 +29,7 @@ module DCI
         res
       ensure
         self.context = old_context
-        events.clear
+        self.events.clear
       end
 
       def context=(ctx)
@@ -37,8 +43,7 @@ module DCI
 
     module ClassMethods
       def call(*args)
-        context_instance = new(*args)
-        context_instance.perform_in_transaction
+        new(*args).perform_in_transaction
       end
     end
 
