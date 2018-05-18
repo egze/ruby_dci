@@ -53,11 +53,11 @@ end
 
 ### config.transaction_class
 
-Usually you want your code to run in a transaction. Either everything runs fine, or nothing is saved. This is done by wrapping the executed code in a transaction block. I use ActiveRecord, but can use whatever you want. You class just needs to implement a `transaction` method that takes a block. If you don't want any transactions, you can either skip `config.transaction_class` completely, or set it to `DCI::NullTransaction`.
+Usually you want your code to run in a transaction. Either everything runs fine, or nothing is saved. This is done by wrapping the executed code in a transaction block. I use ActiveRecord, but you can use whatever you want. Your class just needs to implement a `transaction` method that takes a block. If you don't want any transactions, you can either skip `config.transaction_class` completely, or set it to `DCI::NullTransaction`.
 
 ### config.event_routes
 
-This is your mapping of events that may happen in the context. Key is a class name, and a value is an array of method names. Example:
+This is your mapping of events that may happen in the context. Key is a class name, and the value is an array of method names. Example:
 
 ```ruby
 {
@@ -65,7 +65,7 @@ This is your mapping of events that may happen in the context. Key is a class na
 }
 ```
 
-The system will know that it needs to execute `publish_my_event` from `config.route_methods` for every event of class `DomainEvents::ProductAddedToCart`. If you don't have any actions that you need to perform after a transaction, the just skip `config.event_routes` completely or set it to `Hash.new([])`.
+The system will know that it needs to execute `send_product_added_notification` from `config.route_methods` for every event of class `DomainEvents::ProductAddedToCart`. If you don't have any actions that you need to perform after a transaction, the just skip `config.event_routes` completely or set it to `Hash.new([])`.
 
 I implement events as plain ruby Structs. Example:
 
