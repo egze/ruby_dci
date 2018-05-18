@@ -63,6 +63,7 @@ This is your mapping of events that may happen in the context. Key is a class na
 {
   DomainEvents::ProductAddedToCart => [ :send_product_added_notification ]
 }
+```
 
 The system will know that it needs to execute `publish_my_event` from `config.route_methods` for every event of class `MyEvent`. If you don't have any actions that you need to perform after a transaction, the just skip `config.event_routes` completely or set it to `Hash.new([])`.
 
