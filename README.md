@@ -22,7 +22,7 @@ Or install it yourself as:
 
 ## Before you begin
 
-First of all, make yourself familiar with [DCI](http://dci-in-ruby.info/). :
+First of all, make yourself familiar with [DCI](http://dci-in-ruby.info/) :
 
 > DCI (Data Context Interaction) is a new way to look at object-oriented programming. Instead of focusing on individual objects, the DCI paradigm focuses on communication between objects and makes it explicit. It improves the readability of the code, which helps programmers to reason about their programs.
 
@@ -65,7 +65,7 @@ This is your mapping of events that may happen in the context. Key is a class na
 }
 ```
 
-The system will know that it needs to execute `publish_my_event` from `config.route_methods` for every event of class `MyEvent`. If you don't have any actions that you need to perform after a transaction, the just skip `config.event_routes` completely or set it to `Hash.new([])`.
+The system will know that it needs to execute `publish_my_event` from `config.route_methods` for every event of class `DomainEvents::ProductAddedToCart`. If you don't have any actions that you need to perform after a transaction, the just skip `config.event_routes` completely or set it to `Hash.new([])`.
 
 I implement events as plain ruby Structs. Example:
 
