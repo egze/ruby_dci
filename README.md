@@ -51,6 +51,64 @@ DCI.configure do |config|
 end
 ```
 
+### config.transaction_class
+
+Usually you want your code to run in a transaction. Either everything runs fine, or nothing is saved. This is done by wrapping the executed code in a transaction block. I use ActiveRecord, but can use whatever you want. You class just needs to implement a `transaction` method that takes a block. If you don't want any transactions, you can either skip `config.transaction_class` completely, or set it to `DCI::NullTransaction`.
+
+### config.event_routes
+
+This is your mapping of events that may happen in the context. Key is a class name, and a value is an array of method names. Example:
+
+```ruby
+{
+  DomainEvents::ProductAddedToCart => [ :send_product_added_notification ]
+}
+
+The system will know that it needs to execute `publish_my_event` from `config.route_methods` for every event of class `MyEvent`. If you don't have any actions that you need to perform after a transaction, the just skip `config.event_routes` completely or set it to `Hash.new([])`.
+
+I implement events as plain ruby Structs. Example:
+
+```ruby
+module DomainEvents
+
+  ProductAddedToCart = Struct.new(:product)
+
+end
+```
+
+Why do I do it like this? It makes it easier to add other callbacks later. I can do it in one place instead of searching through hundreds of files. Also makes testing easier.
+
+### config.route_methods
+
+This is a class that implements the methods for the `config.event_routes` mapping. Example:
+
+```ruby
+class EventRouteStore
+
+  def send_product_added_notification(event)
+    AddedToCartNotificationJob.perform_later(id: event.product.id)
+  end
+
+end
+```
+
+### config.raise_in_event_router
+
+When your transaction is commited, you don't want to raise an exception during event processing. You can turn it off in production environment, but still raise when you are developing.
+
+```ruby
+config.raise_in_event_router = !Rails.env.production?
+```
+
+### config.logger
+
+Set a logger in case there is an exception in the event router.
+
+```ruby
+config.logger = Rails.logger
+```
+
+
 ### Context
 
 In a Rails app I put my contexts in `app/contexts`. You define a context by including `DCI::Context`.
@@ -92,6 +150,9 @@ module Customer
 
   def add_to_cart!(product:)
     # do your thing
+
+    # add event to the context
+    context.events << DomainEvents::ProductAddedToCart.new(product)
   end
 
 end
