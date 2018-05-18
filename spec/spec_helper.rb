@@ -21,7 +21,7 @@ RSpec.configure do |config|
   config.before(:all) do
 
     DCI.configure do |config|
-      config.event_routes.store DomainEvents::HomeworkDone, [ :publish_money_transfered ]
+      config.event_routes.store DomainEvents::HomeworkDone, [ :publish_homework_done ]
       config.route_methods = RouteMethodStore.new
     end
 

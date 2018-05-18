@@ -10,7 +10,7 @@ module DCI
     def route_event!(event)
       DCI.configuration.event_routes[event.class].each do |callback|
         dispatch_catching_standard_errors do
-          DCI.configuration.route_methods.method(callback).call(event)
+          DCI.configuration.route_methods.send(callback, event)
         end
       end
     end
@@ -19,8 +19,10 @@ module DCI
       begin
         block.call
       rescue StandardError => e
-        Rails.logger.error "Failed to dispatch event (transaction was still commited). #{ e }"
-        raise e unless Rails.env.production?
+        if DCI.configuration.logger
+          DCI.configuration.logger.error "Failed to dispatch event (transaction was still commited). #{ e }"
+        end
+        raise e if DCI.configuration.raise_in_event_router
       end
     end
 
