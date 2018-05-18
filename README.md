@@ -2,7 +2,7 @@
 
 # RubyDci
 
-A classic DCI implementation for ruby with some extra sugar. I've been using DCI in my Rails projects and I extracted some common patters into this gem.
+A classic DCI implementation for ruby with some extra sugar. I've been using DCI in my Rails projects and I extracted some common patterns into this gem.
 
 ## Installation
 
