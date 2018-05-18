@@ -1,5 +1,6 @@
 require "bundler/setup"
 require "dci"
+require "pry"
 
 require "examples/boy"
 require "examples/domain_events"
