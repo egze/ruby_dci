@@ -4,14 +4,14 @@ module DCI
                   :event_routes,
                   :route_methods,
                   :raise_in_event_router,
-                  :logger
+                  :on_exception_in_router
 
     def initialize
       @transaction_class      = NullTransaction
       @event_routes           = Hash.new([])
       @route_methods          = nil
       @raise_in_event_router  = false
-      @logger                 = nil
+      @on_exception_in_router = -> (exception) { }
     end
   end
 end

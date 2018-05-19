@@ -16,7 +16,7 @@ module DCI
 
       def perform_in_transaction
         old_context = context
-        @events = []
+        @events = init_context_events
         self.context = self
 
         res = nil
@@ -38,6 +38,11 @@ module DCI
 
       def call
         raise NotImplementedError.new("implement me")
+      end
+
+      private
+      def init_context_events
+        []
       end
     end
 

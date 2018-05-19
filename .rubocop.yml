@@ -21,8 +21,6 @@ AllCops:
 
   TargetRubyVersion: 2.5
 
-  TargetRailsVersion: 5.2
-
   DefaultFormatter: simple
 
   DisabledByDefault: true
@@ -94,24 +92,6 @@ Performance/RedundantMatch:
   Enabled: true
 
 Performance/TimesMap:
-  Enabled: true
-
-Rails/ActionFilter:
-  Enabled: true
-
-Rails/Delegate:
-  Enabled: true
-
-Rails/FindBy:
-  Enabled: true
-
-Rails/Output:
-  Enabled: true
-
-Rails/PluralizationGrammar:
-  Enabled: true
-
-Rails/Validation:
   Enabled: true
 
 RSpec/DescribeMethod:

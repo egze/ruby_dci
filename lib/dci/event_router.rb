@@ -2,11 +2,11 @@ module DCI
 
   module EventRouter
 
-    private
     def route_events!(events)
       Array(events).each(&method(:route_event!))
     end
 
+    private
     def route_event!(event)
       DCI.configuration.event_routes[event.class].each do |callback|
         dispatch_catching_standard_errors do
@@ -18,11 +18,10 @@ module DCI
     def dispatch_catching_standard_errors(&block)
       begin
         block.call
-      rescue StandardError => e
-        if DCI.configuration.logger
-          DCI.configuration.logger.error "Failed to dispatch event (transaction was still commited). #{ e }"
-        end
-        raise e if DCI.configuration.raise_in_event_router
+      rescue StandardError => exception
+        DCI.configuration.on_exception_in_router.call(exception) rescue nil
+
+        raise exception if DCI.configuration.raise_in_event_router
       end
     end
 
