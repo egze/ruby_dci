@@ -7,6 +7,18 @@ RSpec.describe DCI::Context do
     end
   end
 
+  describe "included modules" do
+
+    [DCI::Accessor, DCI::Context, DCI::EventRouter].each do |mod|
+
+      it "includes #{ mod }" do
+        expect(DummyContext).to include(mod)
+      end
+
+    end
+
+  end
+
   describe '#call' do
 
     let(:instance) { DummyContext.allocate }

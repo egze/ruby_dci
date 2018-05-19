@@ -1,6 +1,7 @@
 require "bundler/setup"
 require "dci"
 require "pry"
+require "matchers/should_have_attr_accessor"
 
 require "examples/boy"
 require "examples/domain_events"
