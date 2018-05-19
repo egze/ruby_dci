@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/egze/ruby_dci.svg?branch=master)](https://travis-ci.org/egze/ruby_dci)
+[![Coverage Status](https://coveralls.io/repos/github/egze/ruby_dci/badge.svg?branch=master)](https://coveralls.io/github/egze/ruby_dci?branch=master)
 
 # RubyDci
 

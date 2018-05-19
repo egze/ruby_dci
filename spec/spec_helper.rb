@@ -2,6 +2,8 @@ require "bundler/setup"
 require "dci"
 require "pry"
 require "matchers/should_have_attr_accessor"
+require 'coveralls'
+Coveralls.wear!
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
