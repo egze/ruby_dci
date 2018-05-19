@@ -39,7 +39,6 @@ RSpec.describe DCI::EventRouter do
         config.event_routes.store Events::DummyEvent, [ :after_dummy_event, :another_after_dummy_event ]
 
         config.route_methods = route_method_store
-        config.raise_in_event_router = true
       end
     end
 
@@ -51,6 +50,65 @@ RSpec.describe DCI::EventRouter do
 
       expect(route_method_store).to have_received(:after_dummy_event).with(event).ordered
       expect(route_method_store).to have_received(:another_after_dummy_event).with(event).ordered
+    end
+
+    context "exceptions" do
+
+      before do
+        allow(route_method_store).to receive(:after_dummy_event).and_raise(StandardError)
+      end
+
+      context "should raise" do
+
+        let(:logger) { spy("logger") }
+
+        before do
+          DCI.configure do |config|
+            config.event_routes = Hash.new([])
+            config.event_routes.store Events::DummyEvent, [ :after_dummy_event, :another_after_dummy_event ]
+
+            config.route_methods = route_method_store
+            config.raise_in_event_router = true
+            config.on_exception_in_router = -> (ex) { logger.error(ex) }
+          end
+        end
+
+        it "raises exception" do
+          expect { instance.route_events!([event]) }.to raise_error(StandardError)
+        end
+
+        it "calls on_exception_in_router callback" do
+          allow(DCI.configuration).to receive(:on_exception_in_router)
+
+          expect { instance.route_events!([event]) }.to raise_error(StandardError)
+
+          expect(DCI.configuration).to have_received(:on_exception_in_router)
+        end
+
+        it "on_exception_in_router lambda is executed" do
+          expect { instance.route_events!([event]) }.to raise_error(StandardError)
+
+          expect(logger).to have_received(:error).with(StandardError)
+        end
+
+      end
+
+      context "should not raise" do
+        before do
+          DCI.configure do |config|
+            config.event_routes = Hash.new([])
+            config.event_routes.store Events::DummyEvent, [ :after_dummy_event, :another_after_dummy_event ]
+
+            config.route_methods = route_method_store
+            config.raise_in_event_router = false
+          end
+        end
+
+        it "rescues exception" do
+          expect { instance.route_events!([event]) }.not_to raise_error
+        end
+      end
+
     end
 
   end

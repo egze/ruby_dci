@@ -19,7 +19,8 @@ module DCI
       begin
         block.call
       rescue StandardError => exception
-        DCI.configuration.on_exception_in_router.call(exception)
+        DCI.configuration.on_exception_in_router.call(exception) rescue nil
+
         raise exception if DCI.configuration.raise_in_event_router
       end
     end
