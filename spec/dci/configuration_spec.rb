@@ -6,7 +6,7 @@ RSpec.describe DCI::Configuration do
   it { is_expected.to have_attr_accessor(:event_routes) }
   it { is_expected.to have_attr_accessor(:route_methods) }
   it { is_expected.to have_attr_accessor(:raise_in_event_router) }
-  it { is_expected.to have_attr_accessor(:logger) }
+  it { is_expected.to have_attr_accessor(:on_exception_in_router) }
 
   it "sets default transaction_class" do
     expect(instance.transaction_class).to eq DCI::NullTransaction
@@ -21,8 +21,8 @@ RSpec.describe DCI::Configuration do
     expect(instance.route_methods).to be_nil
   end
 
-  it "sets default logger" do
-    expect(instance.logger).to be_nil
+  it "sets default on_exception_in_router" do
+    expect(instance.on_exception_in_router).to be_a Proc
   end
 
   it "sets default raise_in_event_router" do

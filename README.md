@@ -47,7 +47,7 @@ DCI.configure do |config|
   config.route_methods = EventRouteStore.new
   config.transaction_class = ApplicationRecord
   config.raise_in_event_router = !Rails.env.production?
-  config.logger = Rails.logger
+  config.on_exception_in_router = -> (exception) {}
 end
 ```
 
@@ -101,12 +101,12 @@ When your transaction is commited, you don't want to raise an exception during e
 config.raise_in_event_router = !Rails.env.production?
 ```
 
-### config.logger
+### config.on_exception_in_router
 
-Set a logger in case there is an exception in the event router.
+In case there is an exception in the event router, you can provide a handler for the exception. It should be a lambda that receives an exception as a parameter. You can use it to log the exception. If you don't need any logging, just skip `config.on_exception_in_router` completely, or assign an empty lambda.
 
 ```ruby
-config.logger = Rails.logger
+config.logger = -> (exception) { Rails.logger.error(exception) }
 ```
 
 
