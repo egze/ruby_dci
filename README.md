@@ -10,7 +10,7 @@ A classic DCI implementation for ruby with some extra sugar. I've been using DCI
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'ruby_dci'
+gem 'ruby_dci', require: 'dci'
 ```
 
 And then execute:
