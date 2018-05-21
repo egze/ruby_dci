@@ -66,7 +66,7 @@ This is your mapping of events that may happen in the context. Key is a class na
 }
 ```
 
-The system will know that it needs to execute `send_product_added_notification` from `config.route_methods` for every event of class `DomainEvents::ProductAddedToCart`. If you don't have any actions that you need to perform after a transaction, the just skip `config.event_routes` completely or set it to `Hash.new([])`.
+The system will know that it needs to execute `send_product_added_notification` from `config.route_methods` for every event of class `DomainEvents::ProductAddedToCart`. If you don't have any actions that you need to perform after a transaction, then just skip `config.event_routes` completely or set it to `Hash.new([])`.
 
 I implement events as plain ruby Structs. Example:
 
@@ -107,7 +107,7 @@ config.raise_in_event_router = !Rails.env.production?
 In case there is an exception in the event router, you can provide a handler for the exception. It should be a lambda that receives an exception as a parameter. You can use it to log the exception. If you don't need any logging, just skip `config.on_exception_in_router` completely, or assign an empty lambda.
 
 ```ruby
-config.logger = -> (exception) { Rails.logger.error(exception) }
+config.on_exception_in_router = -> (exception) { Rails.logger.error(exception) }
 ```
 
 
