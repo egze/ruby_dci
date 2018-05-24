@@ -2,7 +2,7 @@ require "bundler/setup"
 require "dci"
 require "pry"
 require "matchers/should_have_attr_accessor"
-require 'coveralls'
+require "coveralls"
 Coveralls.wear!
 
 RSpec.configure do |config|

@@ -1,7 +1,8 @@
 RSpec.describe DCI::Accessor do
-
   class DummyObject
+
     include DCI::Accessor
+
   end
 
   subject(:instance) { DummyObject.new }
@@ -14,5 +15,4 @@ RSpec.describe DCI::Accessor do
     Thread.current[:context] = "foo"
     expect(instance.context).to eq "foo"
   end
-
 end

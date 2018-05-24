@@ -1,5 +1,4 @@
 RSpec.describe DCI::NullTransaction do
-
   subject(:described_class) { DCI::NullTransaction }
 
   it "executes block in transaction" do
@@ -11,5 +10,4 @@ RSpec.describe DCI::NullTransaction do
 
     expect(result).to eq [1]
   end
-
 end

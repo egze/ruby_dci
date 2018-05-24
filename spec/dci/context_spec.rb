@@ -1,29 +1,29 @@
 RSpec.describe DCI::Context do
+  before do
+    Thread.current[:context_events] = nil
+  end
 
   class DummyContext
+
     include DCI::Context
 
     def call
     end
+
   end
 
   describe "included modules" do
-
     [DCI::Accessor, DCI::Context, DCI::EventRouter].each do |mod|
-
       it "includes #{ mod }" do
         expect(DummyContext).to include(mod)
       end
-
     end
-
   end
 
-  describe '#call' do
-
+  describe "#call" do
     let(:instance) { DummyContext.allocate }
     let(:arguments) { [1, 2, "foo"] }
-    let(:keyword_arguments) { { a: 1, b: "foo"} }
+    let(:keyword_arguments) { { a: 1, b: "foo" } }
 
     before do
       allow(DummyContext).to receive(:new).and_return(instance)
@@ -48,13 +48,12 @@ RSpec.describe DCI::Context do
 
       expect(instance).to have_received(:perform_in_transaction)
     end
-
   end
 
   describe "#perform_in_transaction" do
-
     subject(:instance) { DummyContext.new }
-    let(:events) { spy("events") }
+    let(:events) { instance_double("events") }
+    let(:old_context_events) { instance_double("old_context_events") }
 
     it "calls call" do
       allow(instance).to receive(:call)
@@ -64,12 +63,14 @@ RSpec.describe DCI::Context do
       expect(instance).to have_received(:call)
     end
 
-    it "calls init_context_events to set defaut value" do
-      allow(instance).to receive(:init_context_events).and_call_original
+    it "calls context_events= setter" do
+      allow(instance).to receive(:context_events).and_return(old_context_events)
+      allow(instance).to receive(:context_events=).and_call_original
 
       instance.perform_in_transaction
 
-      expect(instance).to have_received(:init_context_events)
+      expect(instance).to have_received(:context_events=).with([]).ordered
+      expect(instance).to have_received(:context_events=).with(old_context_events).ordered
     end
 
     it "default events are an empty array" do
@@ -77,20 +78,11 @@ RSpec.describe DCI::Context do
     end
 
     it "routes events" do
-      allow(instance).to receive(:init_context_events).and_return(events)
       allow(instance).to receive(:route_events!)
 
       instance.perform_in_transaction
 
-      expect(instance).to have_received(:route_events!).with(events)
-    end
-
-    it "clears events after execution" do
-      allow(instance).to receive(:init_context_events).and_return(events)
-
-      instance.perform_in_transaction
-
-      expect(events).to have_received(:clear)
+      expect(instance).to have_received(:route_events!).with([])
     end
 
     it "wraps code in transaction" do
@@ -101,7 +93,5 @@ RSpec.describe DCI::Context do
 
       expect(instance).to have_received(:call)
     end
-
   end
-
 end

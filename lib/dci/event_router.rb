@@ -1,5 +1,4 @@
 module DCI
-
   module EventRouter
 
     def route_events!(events)
@@ -7,10 +6,11 @@ module DCI
     end
 
     private
+
     def route_event!(event)
-      DCI.configuration.event_routes[event.class].each do |callback|
+      DCI.configuration.routes[event.class].each do |callback|
         dispatch_catching_standard_errors do
-          DCI.configuration.route_methods.send(callback, event)
+          DCI.configuration.router.send(callback, event)
         end
       end
     end
@@ -21,10 +21,9 @@ module DCI
       rescue StandardError => exception
         DCI.configuration.on_exception_in_router.call(exception) rescue nil
 
-        raise exception if DCI.configuration.raise_in_event_router
+        raise exception if DCI.configuration.raise_in_router
       end
     end
 
   end
-
 end

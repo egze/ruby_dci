@@ -7,8 +7,11 @@ require "dci/context"
 require "dci/role"
 
 module DCI
+
   class << self
-    attr_accessor :configuration
+
+    #attr_accessor :configuration
+
   end
 
   def self.configuration
@@ -22,4 +25,5 @@ module DCI
   def self.configure
     yield(configuration)
   end
+
 end
