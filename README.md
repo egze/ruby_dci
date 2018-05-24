@@ -44,8 +44,8 @@ I configure the gem in `config/initializers/dci_configuration.rb`.
 
 ```ruby
 DCI.configure do |config|
-  config.event_routes = Hash.new([])
-  config.route_methods = EventRouteStore.new
+  config.routes = Hash.new([])
+  config.router = EventRouter.new
   config.transaction_class = ApplicationRecord
   config.raise_in_event_router = !Rails.env.production?
   config.on_exception_in_router = -> (exception) {}
@@ -56,7 +56,7 @@ end
 
 Usually you want your code to run in a transaction. Either everything runs fine, or nothing is saved. This is done by wrapping the executed code in a transaction block. I use ActiveRecord, but you can use whatever you want. Your class just needs to implement a `transaction` method that takes a block. If you don't want any transactions, you can either skip `config.transaction_class` completely, or set it to `DCI::NullTransaction`.
 
-### config.event_routes
+### config.routes
 
 This is your mapping of events that may happen in the context. Key is a class name, and the value is an array of method names. Example:
 
@@ -80,12 +80,12 @@ end
 
 Why do I do it like this? It makes it easier to add other callbacks later. I can do it in one place instead of searching through hundreds of files. Also makes testing easier.
 
-### config.route_methods
+### config.router
 
-This is a class that implements the methods for the `config.event_routes` mapping. Example:
+This is a class that implements the methods for the `config.routes` mapping. Example:
 
 ```ruby
-class EventRouteStore
+class EventRouter
 
   def send_product_added_notification(event)
     AddedToCartNotificationJob.perform_later(id: event.product.id)
@@ -143,7 +143,7 @@ Couple of thigs to keep in mind:
 
 ### Role
 
-In a Rails app I put my roles in `app/roles`. Roles are plain ruby modules. You define a role by including `DCI::Role`.
+In a Rails app I put my roles in `app/roles`. Roles are plain ruby modules. You define a role by including `DCI::Role`. A role has access to the `context` and to the `context_events` methods. You can push events to `context_events` to process them after the transaction.
 
 ```ruby
 module Customer
@@ -154,7 +154,7 @@ module Customer
     # do your thing
 
     # add event to the context
-    context.events << DomainEvents::ProductAddedToCart.new(product)
+    context_events << DomainEvents::ProductAddedToCart.new(product)
   end
 
 end

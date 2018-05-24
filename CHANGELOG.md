@@ -1,3 +1,16 @@
+## 0.3.0 (2018-05-24)
+
+Features:
+
+  - Renamed `DCI::Configuration` accessors. `event_routes` is now `routes`, `route_methods` is now `router`, `raise_in_event_router` is now `raise_in_router`.
+  - `events` is not an instance variable defined in the context anymore, but has the same access style like the `context` itself. In the role don't push events to `context.events`, but to `context_events`.
+
+Bugfixes:
+
+  - Added specs
+  - Added `README.md`
+  - Added `CHANGELOG.md`
+
 ## 0.2.0 (2018-05-19)
 
 Features:

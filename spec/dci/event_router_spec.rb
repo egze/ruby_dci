@@ -1,7 +1,8 @@
 RSpec.describe DCI::EventRouter do
-
   class DummyClassWithRouter
+
     include DCI::EventRouter
+
   end
 
   subject(:instance) { DummyClassWithRouter.new }
@@ -17,59 +18,62 @@ RSpec.describe DCI::EventRouter do
   end
 
   context "with route method store" do
-
     module Events
+
       DummyEvent = Struct.new(:id)
+
     end
 
-    class RouteMethodStore
+    class Router
+
       def after_dummy_event(event)
       end
 
       def another_after_dummy_event(event)
       end
+
     end
 
-    let(:route_method_store) { RouteMethodStore.new }
+    let(:router) { Router.new }
     let(:event) { Events::DummyEvent.new(1) }
 
     before do
       DCI.configure do |config|
-        config.event_routes = Hash.new([])
-        config.event_routes.store Events::DummyEvent, [ :after_dummy_event, :another_after_dummy_event ]
+        config.routes = Hash.new([])
+        config.routes.store Events::DummyEvent, [:after_dummy_event, :another_after_dummy_event]
 
-        config.route_methods = route_method_store
+        config.router = router
       end
     end
 
     it "routes event" do
-      allow(route_method_store).to receive(:after_dummy_event)
-      allow(route_method_store).to receive(:another_after_dummy_event)
+      allow(router).to receive(:after_dummy_event)
+      allow(router).to receive(:another_after_dummy_event)
 
       instance.route_events!([event])
 
-      expect(route_method_store).to have_received(:after_dummy_event).with(event).ordered
-      expect(route_method_store).to have_received(:another_after_dummy_event).with(event).ordered
+      expect(router).to have_received(:after_dummy_event).with(event).ordered
+      expect(router).to have_received(:another_after_dummy_event).with(event).ordered
     end
 
     context "exceptions" do
-
       before do
-        allow(route_method_store).to receive(:after_dummy_event).and_raise(StandardError)
+        allow(router).to receive(:after_dummy_event).and_raise(StandardError)
       end
 
       context "should raise" do
-
-        let(:logger) { spy("logger") }
+        let(:logger) { instance_double("logger", error: nil) }
 
         before do
           DCI.configure do |config|
-            config.event_routes = Hash.new([])
-            config.event_routes.store Events::DummyEvent, [ :after_dummy_event, :another_after_dummy_event ]
+            config.routes = Hash.new([])
+            config.routes.store Events::DummyEvent, [:after_dummy_event, :another_after_dummy_event]
 
-            config.route_methods = route_method_store
-            config.raise_in_event_router = true
-            config.on_exception_in_router = -> (ex) { logger.error(ex) }
+            config.router = router
+            config.raise_in_router = true
+            config.on_exception_in_router = -> (ex) do
+              logger.error(ex)
+            end
           end
         end
 
@@ -90,17 +94,17 @@ RSpec.describe DCI::EventRouter do
 
           expect(logger).to have_received(:error).with(StandardError)
         end
-
       end
 
       context "should not raise" do
         before do
-          DCI.configure do |config|
-            config.event_routes = Hash.new([])
-            config.event_routes.store Events::DummyEvent, [ :after_dummy_event, :another_after_dummy_event ]
+          DCI.reset
 
-            config.route_methods = route_method_store
-            config.raise_in_event_router = false
+          DCI.configure do |config|
+            config.routes = Hash.new([])
+            config.routes.store Events::DummyEvent, [:after_dummy_event, :another_after_dummy_event]
+            config.raise_in_router = false
+            config.router = router
           end
         end
 
@@ -108,9 +112,6 @@ RSpec.describe DCI::EventRouter do
           expect { instance.route_events!([event]) }.not_to raise_error
         end
       end
-
     end
-
   end
-
 end

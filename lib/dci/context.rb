@@ -1,5 +1,4 @@
 module DCI
-
   module Context
 
     include EventRouter
@@ -16,8 +15,10 @@ module DCI
 
       def perform_in_transaction
         old_context = context
-        @events = init_context_events
+        old_context_events = context_events
+
         self.context = self
+        self.context_events = []
 
         res = nil
 
@@ -25,15 +26,19 @@ module DCI
           res = call
         end
 
-        route_events!(events)
+        route_events!(context_events)
         res
       ensure
         self.context = old_context
-        self.events.clear
+        self.context_events = old_context_events
       end
 
       def context=(ctx)
         Thread.current[:context] = ctx
+      end
+
+      def context_events=(ctx_events = [])
+        Thread.current[:context_events] = Array(ctx_events).compact.flatten
       end
 
       def call
@@ -41,17 +46,20 @@ module DCI
       end
 
       private
+
       def init_context_events
         []
       end
+
     end
 
     module ClassMethods
+
       def call(*args)
         new(*args).perform_in_transaction
       end
+
     end
 
   end
-
 end
