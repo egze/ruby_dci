@@ -1,3 +1,10 @@
+## 0.3.1 (2018-05-25)
+
+Features:
+
+  - Cleaned up gemspec to only include needed files.
+  - Applied some more rubocop rules.
+
 ## 0.3.0 (2018-05-24)
 
 Features:
