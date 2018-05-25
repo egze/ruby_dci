@@ -69,8 +69,8 @@ RSpec.describe DCI::EventRouter do
             config.routes = Hash.new([])
             config.routes.store Events::DummyEvent, [:after_dummy_event, :another_after_dummy_event]
 
-            config.router = router
-            config.raise_in_router = true
+            config.router                 = router
+            config.raise_in_router        = true
             config.on_exception_in_router = -> (ex) do
               logger.error(ex)
             end
@@ -104,7 +104,7 @@ RSpec.describe DCI::EventRouter do
             config.routes = Hash.new([])
             config.routes.store Events::DummyEvent, [:after_dummy_event, :another_after_dummy_event]
             config.raise_in_router = false
-            config.router = router
+            config.router          = router
           end
         end
 

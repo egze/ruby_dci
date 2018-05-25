@@ -14,10 +14,10 @@ module DCI
     module InstanceMethods
 
       def perform_in_transaction
-        old_context = context
+        old_context        = context
         old_context_events = context_events
 
-        self.context = self
+        self.context        = self
         self.context_events = []
 
         res = nil
@@ -29,7 +29,7 @@ module DCI
         route_events!(context_events)
         res
       ensure
-        self.context = old_context
+        self.context        = old_context
         self.context_events = old_context_events
       end
 

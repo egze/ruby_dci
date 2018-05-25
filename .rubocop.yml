@@ -197,6 +197,8 @@ Layout/EmptyLinesAroundModuleBody:
 
 Layout/ExtraSpacing:
   Enabled: true
+  AllowForAlignment: true
+  ForceEqualSignAlignment: true
 
 Style/EmptyElse:
   Enabled: true

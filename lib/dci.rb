@@ -10,7 +10,7 @@ module DCI
 
   class << self
 
-    #attr_accessor :configuration
+    attr_writer :configuration
 
   end
 
