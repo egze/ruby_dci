@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
   spec.homepage      = "https://github.com/egze/ruby_dci"
   spec.license       = "MIT"
 
-  spec.files         = Dir.glob("{lib}/**/*.rb") + ["README.md", "CHANGELOG.md", "TODO", "Rakefile"]
+  spec.files         = Dir.glob("{lib}/**/*.rb") + ["README.md", "CHANGELOG.md", "Rakefile"]
   spec.test_files    = Dir.glob("spec/**/*")
 
   spec.require_paths = ["lib"]
