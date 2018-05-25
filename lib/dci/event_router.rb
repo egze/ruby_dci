@@ -15,9 +15,9 @@ module DCI
       end
     end
 
-    def dispatch_catching_standard_errors(&block)
+    def dispatch_catching_standard_errors
       begin
-        block.call
+        yield
       rescue StandardError => exception
         DCI.configuration.on_exception_in_router.call(exception) rescue nil
 
