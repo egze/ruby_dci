@@ -1,3 +1,10 @@
+## 0.3.2 (2018-06-01)
+
+Features:
+
+  - `include_context_event` RSpec matcher.
+
+
 ## 0.3.1 (2018-05-25)
 
 Features:
