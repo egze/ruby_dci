@@ -160,6 +160,21 @@ module Customer
 end
 ```
 
+## Testing
+
+The gem includes a RSpec matcher `include_context_event`. Use it like this:
+
+In `rails_helper.rb`:
+```ruby
+require 'dci/rspec/matchers'
+```
+
+In your spec:
+```ruby
+expect(customer).to include_context_event DomainEvent::ProductAddedToCart
+```
+
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
