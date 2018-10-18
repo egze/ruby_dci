@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ruby_dci (0.3.3)
+    ruby_dci (0.3.4)
       rspec-support (~> 3.7)
 
 GEM
