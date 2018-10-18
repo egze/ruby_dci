@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    ruby_dci (0.3.2)
+    ruby_dci (0.3.3)
       rspec-support (~> 3.7)
 
 GEM
@@ -57,4 +57,4 @@ DEPENDENCIES
   ruby_dci!
 
 BUNDLED WITH
-   1.16.2
+   1.16.4
