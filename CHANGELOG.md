@@ -1,3 +1,9 @@
+## 0.3.4 (2018-10-18)
+
+Features:
+
+  - `dci_context!` RSpec helper.
+
 ## 0.3.2 (2018-06-01)
 
 Features:

@@ -5,6 +5,10 @@ RSpec.configure do |config|
   config.before do
     Thread.current[:context_events] = []
   end
+
+  config.after do
+    Thread.current[:context_events] = nil
+  end
 end
 
 RSpec::Matchers.define :include_context_event do |expected_context_event|
